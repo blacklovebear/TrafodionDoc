@@ -3,6 +3,7 @@
 - [参考指引-中文](https://cwiki.apache.org/confluence/pages/viewpage.action?pageId=61324685)
 - [参考指引-英文](http://trafodion.apache.org/install.html)
 
+
 ## 注意点
 
 - 禁用requiretty
@@ -45,3 +46,6 @@ sudo yum -y install protobuf-2.5.0-16.1.x86_64.rpm
 sqstart 启动 trafodion   (我是在 81节点上启动的，但是trafodion运行在84和85节点上)
 sqcli 连接 trafodion    (在84上连接trafodion)
 ```
+
+### 让 trafci命令行支持 readline 键盘操作
+[参考](http://www.cnblogs.com/lanston/p/3787685.html)

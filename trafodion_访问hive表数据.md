@@ -13,6 +13,20 @@ select * from hive.hive.t; -- explicit table name
 ```
 *注意trafodion 不支持 hive 中的 varchar(20+) 类型*
 
+### Hive 字段与 Tradofion 对应关系
+[参考](http://trafodion.apache.org/docs/sql_reference/index.html#type_mapping_from_hive_to_trafodion_sql)
+
+| Hive Type | Trafodion SQL Type |
+| ------| ------ |
+| tinyint | smallint |
+| smallint | smallint |
+| int | int |
+| bigint | largeint |
+| string | varchar(n bytes) character set utf8 |
+| float | real |
+| double | float(54) |
+| timestamp | timestamp(6) |
+
 ### 异常处理
 ```
 SQL>select * from hive.hive.test1;

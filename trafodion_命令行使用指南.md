@@ -31,3 +31,30 @@ invoke [table_name]
 
 ...
 ```
+
+### 有用命令
+```
+让命令行显示时间
+SET TIME ON
+
+显示SQL执行耗费时间
+SET TIMING ON
+
+设置当前schema
+SET SCHEMA xxx.xxx;
+
+查看当前schema
+SHOW SCHEMA
+
+重复执行上一条sql命令
+/, RUN, or REPEAT
+
+查看上条sql语句的 statistics 分析信息
+GET STATISTICS
+
+格式化查询结果，使结果更美观
+SET COLSEP |
+
+展示每次sql操作的 STATISTICS 分析信息
+SET STATISTICS ON
+```
