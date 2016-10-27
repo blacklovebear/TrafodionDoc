@@ -7,5 +7,12 @@
 ```
 - 下载依赖包
 ```
-yum install --downloadonly --downloaddir=/root/trafodion_downloads/depend_on_rpm pdsh
+package_list: epel pdsh apr apr-util sqlite expect perl-DBD-SQLite* protobuf xerces-c perl-Params-Validate perl-Time-HiRes gzip lzo lzop unzip
+
+yum install --downloadonly --downloaddir=/root/trafodion_downloads/depend_on_rpm xxx
+```
+
+- 从本地安装rpm
+```
+yum --nogpgcheck localinstall xxx.rpm
 ```

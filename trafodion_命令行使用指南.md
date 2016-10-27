@@ -16,6 +16,9 @@ help [command];    eg: help show;
 查看所有表
 show tables;
 
+查看表结构
+showddl [test1]
+
 参看所有Schema
 show schemas;
 

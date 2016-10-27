@@ -49,3 +49,5 @@ sqcli 连接 trafodion    (在84上连接trafodion)
 
 ### 让 trafci命令行支持 readline 键盘操作
 [参考](http://www.cnblogs.com/lanston/p/3787685.html)
+
+
