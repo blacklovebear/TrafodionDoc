@@ -4,7 +4,7 @@
 ```
 set schema hive.hive;
 
-CQD HIVE_MAX_STRING_LENGTH '20'; -- creates a more readable display
+CQD HIVE_MAX_STRING_LENGTH '1000'; -- creates a more readable display
 select * from t; -- implicit table name
 
 set schema trafodion.seabase;
