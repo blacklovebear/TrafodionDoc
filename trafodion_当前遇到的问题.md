@@ -6,6 +6,7 @@
 
 1.trafodin 中字符类型统一使用 varchar(n bytes) character set utf8 类型
 2.CQD HIVE_MAX_STRING_LENGTH '1000'; -- 设置字符串最大长度
+3.或者时间格式：2016-01-01 00:00:00.0 出现在字符串中，这种格式的字符有问题
 ```
 
 - 超过两个连接出现连接失败
@@ -31,4 +32,23 @@ maxClientCnxns   40
 ```
 -- This setting is required if there are time-related column types in the target Trafodion table.
 CQD ALLOW_INCOMPATIBLE_ASSIGNMENT 'on' ;
+```
+
+- 创建表，字段中默认值的字符编码默认是iso88591，用以下语句设置为utf8
+```
+create table test1(name varchar(10) default _UTF8'test');
+
+```
+
+- 删除表失败，并报错
+[解决方案参考](https://cwiki.apache.org/confluence/display/TRAFODION/Metadata+Cleanup)
+```
+11:10:54 SQL>drop table EX_DC_SZPL_PROJECT_SUITE_INFO;
+
+*** ERROR[2006] Internal error: assertion failure (keyColOffset == totalKeyLength) in file  at line -99999. [2016-12-02 11:11:26]
+*** ERROR[8839] Transaction was aborted. [2016-12-02 11:11:26]
+
+解决办法：
+cleanup table EX_DC_SZPL_PROJECT_SUITE_INFO;
+cleanup metadata, check, return details;
 ```
