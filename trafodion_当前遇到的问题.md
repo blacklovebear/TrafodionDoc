@@ -52,3 +52,38 @@ create table test1(name varchar(10) default _UTF8'test');
 cleanup table EX_DC_SZPL_PROJECT_SUITE_INFO;
 cleanup metadata, check, return details;
 ```
+
+- 批量将hive中的数据load到trafodion中出现异常
+```
+load into excrawler.EX_DC_SZPL_PROJECT_SUITE_INFO 
++>select * from hive.hive.EX_DC_SZPL_PROJECT_SUITE_INFO;
+                     
+*** ERROR[8448] Unable to access Hbase interface. Call to ExpHbaseInterface::addToHFile returned error HBASE_ADD_TO_HFILE_ERROR(-713). Cause: 
+java.lang.OutOfMemoryError: Direct buffer memory
+java.nio.Bits.reserveMemory(Bits.java:658)
+java.nio.DirectByteBuffer.<init>(DirectByteBuffer.java:123)
+java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:306)
+org.apache.hadoop.hbase.util.ByteBufferArray.<init>(ByteBufferArray.java:65)
+org.apache.hadoop.hbase.io.hfile.bucket.ByteBufferIOEngine.<init>(ByteBufferIOEngine.java:47)
+org.apache.hadoop.hbase.io.hfile.bucket.BucketCache.getIOEngineFromName(BucketCache.java:307)
+org.apache.hadoop.hbase.io.hfile.bucket.BucketCache.<init>(BucketCache.java:217)
+org.apache.hadoop.hbase.io.hfile.CacheConfig.getBucketCache(CacheConfig.java:614)
+org.apache.hadoop.hbase.io.hfile.CacheConfig.getL2(CacheConfig.java:553)
+org.apache.hadoop.hbase.io.hfile.CacheConfig.instantiateBlockCache(CacheConfig.java:637)
+org.apache.hadoop.hbase.io.hfile.CacheConfig.<init>(CacheConfig.java:231)
+org.trafodion.sql.HBulkLoadClient.doCreateHFile(HBulkLoadClient.java:209)
+org.trafodion.sql.HBulkLoadClient.addToHFile(HBulkLoadClient.java:245)
+. [2016-12-02 17:55:40]
+
+----------解决办法----------------
+hbase.bucketcache.ioengine 设置为空
+之前的默认值是 hbase.bucketcache.ioengine=offheap
+```
+
+- Trafodion JDBC连接栈溢出
+解决办法
+```
+$SQ_ROOT/dcs-2.0.1/conf/dcs-env.sh
+# 修改大一点，单位为MB
+export DCS_HEAPSIZE=2048
+```

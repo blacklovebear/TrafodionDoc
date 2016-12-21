@@ -28,7 +28,7 @@ create index demo_ix on sch.demo(name)
 hbase_options
 (
 DATA_BLOCK_ENCODING = 'FAST_DIFF',
-COMPRESSION = 'GZ'
+COMPRESSION = 'SNAPPY'
 )
 salt like table;
 ```

@@ -1,0 +1,43 @@
+trafodion 查询测试报告
+
+表名：customer_info
+行数：2161293
+
+测试一：int 类型字段，精确查找
+没有索引：
+select * from customer_info where customer_id = 7
+Elapsed: 00:00:52.055（52秒）
+建立索引后：
+select * from customer_info where customer_id = 7
+Elapsed: 00:00:00.317（1秒以内）
+结论：
+trafodion做条件查询严重依赖索引。
+没有索引的情况就是做全表扫描。
+因为trafodion是依赖Hbase的，严重依赖索引也可以解释
+
+
+测试二：varchar 类型字符，匹配查询
+没有索引：
+select * from customer_info where phone = '18682261052';
+Elapsed: 00:00:48.853（48秒）
+建立索引后：
+select * from customer_info where phone = '18682261052';
+Elapsed: 00:00:38.000（38秒）
+结论：
+varchar 类型字符匹配查询不会利用索引
+
+
+测试三：char 类型字符，匹配查询
+没有索引：
+select * from customer_info where phone = '18682261052';
+Elapsed: 00:00:50.218（50秒）
+建立索引后：
+select * from customer_info where phone = '18682261052';
+Elapsed: Elapsed: 00:00:00.022（1秒以内）
+结论：
+char 数据类型的字段可以利用索引
+
+
+总结：
+如果想很好的利用trafodion，查询操作都需要建立在索引的基础上。
+另外like查询，无法利用索引。
