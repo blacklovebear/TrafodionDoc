@@ -31,7 +31,8 @@ env;
 查看表结构
 invoke [table_name]
 
-
+查看所有可以设置的CQD项
+SHOWCONTROL ALL;
 ...
 ```
 

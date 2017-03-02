@@ -23,4 +23,14 @@ data-type is:
   | time [(time-precision)]
   | timestamp [(timestamp-precision)]
   | interval { start-field to end-field | single-field }
+  | clob
+  | blob
+```
+
+### 创建 ID自增的表
+```
+create table test2(
+aa  LARGEINT GENERATED ALWAYS AS IDENTITY,
+bb  VARCHAR(10)
+);
 ```

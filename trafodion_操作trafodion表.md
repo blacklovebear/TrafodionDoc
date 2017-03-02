@@ -18,6 +18,13 @@ CREATE TABLE trafodion.sales.odetail
 ### 插入数据
 ```
 INSERT INTO trafodion.sales.odetail VALUES ( 900000, 7301, 425.00, 100 );
+
+-- 利用 upsert
+UPSERT [USING LOAD] INTO table [(target-col-list)] {query-expr | values-clause}
+target-col-list is:
+    column-name[, column-name]...
+values-clause is:
+    VALUES ( expression[, expression]... )
 ```
 
 ### 切换当前SCHEMA
@@ -39,4 +46,9 @@ ORDERNUM    PARTNUM  UNIT_PRICE    QTY_ORDERED
 ### 更新统计信息
 ```
 UPDATE STATISTICS FOR TABLE t ON EVERY COLUMN SAMPLE;
+```
+
+### 查看统计信息
+```
+showstats for table t on every column;
 ```

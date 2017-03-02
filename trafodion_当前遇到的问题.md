@@ -9,24 +9,6 @@
 3.或者时间格式：2016-01-01 00:00:00.0 出现在字符串中，这种格式的字符有问题
 ```
 
-- 超过两个连接出现连接失败
-Zookeeper配置最大客户端连接数
-```
-解决方法：
-
-要在Hortonworks集群上的Zookeeper中配置最大客户端连接，请执行以下操作：
-1.登录Ambari gui界面
-2.点击左边的Zookeeper
-3.选择顶部标签的"Configs"
-4.滚动至底部并点击"Customer zoo.cfg"
-5.选择"Add Property..."
-maxClientCnxns   40
-
-6.点击"Add"
-7.重启Ambari
-8.停止Trafodion （在终端运行sqstop）
-9.启动Trafodion （在终端运行sqstart）
-```
 
 - 从trafodion查询带时间字段的hive表，失败报不兼容的时间类型
 ```
@@ -86,4 +68,47 @@ hbase.bucketcache.ioengine 设置为空
 $SQ_ROOT/dcs-2.0.1/conf/dcs-env.sh
 # 修改大一点，单位为MB
 export DCS_HEAPSIZE=2048
+```
+
+- Trafodion Master挂掉问题
+解决办法将master的内存调大：DCS_HEAPSIZE=4096
+```
+core 文件
+#0  0x00000036ae0325e5 in raise () from /lib64/libc.so.6
+#1  0x00000036ae033dc5 in abort () from /lib64/libc.so.6
+#2  0x00007f7960440aef in sqInit () at ../cli/CliExtern.cpp:881
+#3  0x00007f7960440b9d in CliNonPrivPrologue () at ../cli/CliExtern.cpp:921
+#4  0x00007f7960444503 in SQL_EXEC_CreateContext (context_handle=0x2ec82f0, sqlAuthId=0x0, forFutureUse=0) at ../cli/CliExtern.cpp:1448
+#5  0x00007f7962573866 in CONNECT (pSrvrConnect=0x2ec82f0) at native/SqlInterface.cpp:2841
+#6  0x00007f796256ce30 in SRVR_CONNECT_HDL::sqlConnect (this=0x2ec82f0, uid=<value optimized out>, pwd=<value optimized out>) at native/CSrvrConnect.cpp:113
+#7  0x00007f796257edbd in Java_org_trafodion_jdbc_t2_SQLMXConnection_connect (jenv=0x2cba9e8, jobj=0x7f7959053370, server=<value optimized out>, uid=0x0, pwd=0x0)
+    at native/SQLMXConnection.cpp:210
+```
+
+- Hbase RegionServer 挂掉
+```
+将zookeeper的超时时间，调整为3分钟
+将RegionServer的-Xmx最大内存调大
+```
+
+- Trafodion 启动失败
+```
+Exception in thread "main" java.lang.NoSuchMethodError: org.slf4j.spi.LocationAwareLogger.log(Lorg/slf4j/Marker;Ljava/lang/String;ILjava/lang/String;[Ljava/lang/Object;Ljava/lang/Throwable;)V
+    at org.apache.commons.logging.impl.SLF4JLocationAwareLog.debug(SLF4JLocationAwareLog.java:133)
+    at org.trafodion.dcs.zookeeper.ZkClient.init(ZkClient.java:124)
+    at org.trafodion.dcs.zookeeper.ZkClient.<init>(ZkClient.java:133)
+    at org.trafodion.dcs.zookeeper.ZkUtil.main(ZkUtil.java:86)
+
+解决方法：
+修改文件：dcs-2.0.1/conf/dcs-env.sh
+export DCS_CLASSPATH=${DCS_CLASSPATH}:/usr/hdp/2.4.2.0-258/hbase/lib/slf4j-api-1.7.7.jar:
+
+修改文件：./dcs-2.0.1/bin/dcs
+# Add user-specified CLASSPATH last
+if [ "$DCS_CLASSPATH" != "" ]; then
+  CLASSPATH=${DCS_CLASSPATH}:${CLASSPATH}
+fi
+
+
+pdcp -r -w xdata[68-71] /home/trafodion/apache-trafodion_server/dcs-2.0.1/* /home/trafodion/apache-trafodion_server/dcs-2.0.1/
 ```
